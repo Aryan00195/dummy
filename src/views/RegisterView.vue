@@ -40,6 +40,8 @@
   </v-container>
   </template>
   <script>
+import axios from 'axios';
+import Swal from 'sweetalert2';
   export default {
     data(){
       return{
@@ -73,14 +75,27 @@
     methods: {
       saveData(){
         const valid= this.$refs.myLoginForm.validate();
-        console.log('this is my func',valid);
         if(valid){
-          console.log('inside valid',this.formField);
+          // console.log('inside valid',this.formField);
+          const data={
+            name:this.formField.name,
+            password:this.formField.password,
+            email:this.formField.email,
+            action :'addUser'
+          }
+          console.log(data);
+          axios.post('index.php', data).then(({data})=>{
+            Swal.fire("Success",data.message,"success");
+            window.location.href="http://localhost:8080/#/login"
+          })
+          .catch(({response,message})=>{
+            Swal.fire("Error",response && response.data?response.data.message:message,"error");
+          });
         }
     },
-    reset () {
-        this.$refs.myLoginForm.reset()
-      },
+    // reset () {
+    //     this.$refs.myLoginForm.reset()
+    //   },
     },
   }
 </script>

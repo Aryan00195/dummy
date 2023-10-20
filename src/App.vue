@@ -2,14 +2,36 @@
   <v-app>
     <nav>
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/register">Register</router-link> |
-      <router-link to="/login">Login</router-link> 
+      <router-link to="/about" >About</router-link> |
+      <router-link to="/register" v-if="!isLogin">Register</router-link> |
+      <router-link to="/login"  v-if="!isLogin">Login</router-link>
+       <router-link to="/view" v-if="isLogin">View User</router-link>
+      <v-btn color="grey" v-if="isLogin" @click='logout'>Logout</v-btn>
     </nav>
-    <router-view/>
+      <router-view/>
   </v-app>
 </template>
-
+<script>
+  export default {
+    mounted(){
+      const isLoggedIn = localStorage.getItem('isLogin');
+      this.isLogin =isLoggedIn && isLoggedIn == '1';  
+    },
+    data() {
+      return{
+        isLogin:false
+      }
+    },
+    methods: {
+      logout() {
+        this.isLogin= false;
+        localStorage.setItem('isLogin',0);
+        console.log(localStorage.getItem('isLogin'));
+        this.$router.go();
+      }
+    }
+  }
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

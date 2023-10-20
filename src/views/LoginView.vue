@@ -26,18 +26,21 @@
   </v-container>
   </template> 
   <script>
-  import userMixins from "@/mixins/userMixins"
+  import userMixins from "@/mixins/userMixins.js"
   export default {
     name: 'RegistrationComponent',
     mixins: [userMixins],
     data: () => ({
+    
     }),
 
     methods: {
       submit () {
-        const valid = this.$refs.formValues.validate();
+        const valid = this.$refs.form.validate();
         if(valid){
-          console.log(this.formValues);
+          console.log(this.email,this.password);
+          localStorage.setItem('isLogin', 1);
+          this.$router.go();
         }
       },
     },
